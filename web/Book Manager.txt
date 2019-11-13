@@ -1,0 +1,121 @@
+CREATE DATABASE IF NOT EXISTS BOOK_MANAGER;
+use BOOK_MANAGER;
+
+
+CREATE TABLE IF NOT EXISTS user (
+	user_id   int(9) AUTO_INCREMENT,
+	name      varchar(50)  not null,
+	surname   varchar(100) not null,
+	username  varchar(200) not null,
+	password  varchar(50)  not null,
+	nivel     int(1)       not null,
+	primary key(user_id)
+)
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS reader (
+	reader_code  varchar(50)  not null,
+	name         varchar(50)  not null,
+	surname      varchar(100) not null,
+	sex          int(1)       not null,
+	born_date    varchar(50)  not null,
+	address      varchar(100) not null,
+	doc_type     varchar(50)  not null,
+	num_doc      varchar(50)  not null, 
+	born_place   varchar(200) not null,
+	contact      varchar(30)  not null,
+	category     varchar(50)  not null,
+	primary key(reader_code)
+)
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS professor(
+	professor_code  varchar(50)  not null, 
+	subject         varchar(100) not null,
+	course          varchar(100) not null,
+	reader_code     varchar(50)  not null,
+	primary key(professor_code),
+	foreign key(reader_code) references reader (reader_code) on delete cascade on update cascade
+)
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS student(
+	student_code  varchar(50)  not null,
+	school        varchar(200) not null,
+	course        varchar(100) not null,
+	class         varchar(50)  not null,
+	reader_code   varchar(50)  not null,
+        primary key(student_code),
+	foreign key(reader_code) references reader (reader_code) on delete cascade on update cascade
+)
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS visitor(
+	visitor_code  varchar(50)  not null,
+	from_where    varchar(200) not null,
+	carrer        varchar(100) not null,
+	reader_code   varchar(50)  not null,
+	primary key(visitor_code),
+	foreign key(reader_code) references reader (reader_code) on delete cascade on update cascade
+)
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+CREATE TABLE IF NOT EXISTS book(
+	book_code      varchar(50)  not null, 
+	tittle         varchar(200) not null,
+	author         varchar(200) not null,
+	category       varchar(100) not null,
+	publisher      varchar(200) not null,
+	publish_year   int(6)       not null, 
+	brand_comme    varchar(200),	
+	time           varchar(80),
+	amount         int(9),
+	tunel          int(9),
+	shelf          varchar(200),
+	primary key(book_code)
+)
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+CREATE TABLE IF NOT EXISTS requires(
+	require_code       varchar(50)  not null,
+	reader_code        varchar(50)  not null,
+	book_code          varchar(50)  not null,
+	user_id            int(9),
+	require_type       varchar(100) not null,
+	require_time       varchar(50)  not null,
+	require_date       varchar(50)  not null,
+ 	primary key(require_code),
+ 	foreign key(reader_code) REFERENCES reader (reader_code) on delete cascade on update cascade,
+ 	foreign key(book_code)   REFERENCES book   (book_code)   on delete cascade on update cascade,
+ 	foreign key(user_id)     REFERENCES user   (user_id)     on delete cascade on update cascade
+)
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+CREATE TABLE IF NOT EXISTS handover(
+	handover_code     varchar(50)  not null,
+	reader_code       varchar(50)  not null,
+	book_code         varchar(50)  not null,
+	user_id           int(9),
+	require_code      varchar(50)  not null,
+	require_type      varchar(100) not null,
+	handover_time     varchar(50)  not null,
+	handover_date     varchar(50)  not null,
+ 	primary key(handover_code),
+ 	foreign key(reader_code) REFERENCES reader (reader_code) on delete cascade on update cascade,
+ 	foreign key(book_code)  REFERENCES book   (book_code)   on delete cascade on update cascade,
+ 	foreign key(user_id)     REFERENCES user   (user_id)     on delete cascade on update cascade,
+	foreign key(require_code)     REFERENCES requires (require_code)     on delete cascade on update cascade
+)
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
